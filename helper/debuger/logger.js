@@ -16,7 +16,7 @@ const logWindows = async (scope, icon, title, color, msg) => {
     msg2.push(groupPadding(scope, scopeSize, 'padEnd'))
     msg2.push(chalk.cyan('»'))
   }
-  if (!DevMode || DebugMode) console.log(...(msg2.concat(msg)))
+  if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
   if (DevMode) return
   const db = require('./../mongodb')
   let { Audit } = await db.open()
@@ -28,7 +28,7 @@ const logLinux = async (scope, icon, msg) => {
   let msg2 = [ moment().format('YYYY-MM-DD HH:mm:ss.SSS'), (!icon ? '…' : icon) ]
   if (scope) msg2.push(`[${scope.toUpperCase()}]`)
 
-  if (!DevMode || DebugMode) console.log(...(msg2.concat(msg)))
+  if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
   if (DevMode) return
   const db = require('./../mongodb')
   let { Audit } = await db.open()

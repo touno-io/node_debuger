@@ -12,7 +12,7 @@ module.exports = async () => {
     logger.log(`Closed. mongodb://[@touno-io/debuger]/log-audit`)
   }
 
-  conn.Audit = conn.model('db-log-audit', mongoose.Schema({
+  conn.Audit = conn.model('log-audit', mongoose.Schema({
     type: {
       type: String,
       index: true
@@ -29,7 +29,7 @@ module.exports = async () => {
     }
   }), 'db-log-audit')
 
-  conn.Notify = conn.model('db-log-notify', mongoose.Schema({
+  conn.Notify = conn.model('log-notify', mongoose.Schema({
     endpoint: {
       type: String,
       index: true
