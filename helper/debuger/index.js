@@ -1,8 +1,6 @@
 const loggerCreate = require('./logger')
 const timezone = require('moment-timezone')
-const Raven = require('./../raven')
 const Time = require('./../time')
-const { isDev } = require('./../variable')
 
 timezone.tz.setDefault(process.env.TZ || 'Asia/Bangkok')
 
@@ -10,36 +8,38 @@ module.exports = Object.assign(loggerCreate(), {
   scope (name) {
     return loggerCreate(name)
   },
-  audit: (message, timeline, badge, tag) => Raven.Tracking(async () => {
+  audit: (message, type = 'audit', tag = []) => async () => {
     let measure = new Time()
-    const db = require('./../../db-touno')
-    if (!db.connected()) throw new Error('MongoDB ConnectionOpen() is not used.')
+    const db = require('./../mongodb')
     let { Audit } = await db.open()
+    if (!message || !Audit) return
     let log = new Audit({
       created: new Date(),
-      message: message,
-      timeline: (isDev ? 'test' : timeline) || null,
-      badge: badge || null,
-      tag: tag || []
+      scope: 'audit',
+      message,
+      type,
+      tag
     })
     await log.save()
-    let logger = loggerCreate('Audit')
-    logger.info(`Server audit log`, message.length, `characters saved. (${measure.nanoseconds()})`)
-  }),
-  LINE: (message, schedule = null) => Raven.Tracking(async () => {
+    let logger = loggerCreate('debuger')
+    logger.log(`audit log`, message.length, `characters saved. (${measure.nanoseconds()})`)
+  },
+  LINE: (message, schedule = new Date(), endpoint = 'Touno') => async () => {
+    if (!message || !schedule) return
     let measure = new Time()
-    const db = require('./../../db-touno')
-    if (!db.connected()) throw new Error('MongoDB ConnectionOpen() is not used.')
-    let { Notification } = await db.open()
-    let log = new Notification({
-      endpoint: 'Touno',
-      message: message,
-      notify: isDev,
+    const db = require('./../mongodb')
+    let { Notify } = await db.open()
+    if (!Notify) return
+
+    let log = new Notify({
+      endpoint,
+      message,
+      notify: false,
       schedule: schedule,
       created: new Date()
     })
     await log.save()
-    let con = loggerCreate('Notify')
-    con.info(`Server notify message`, message.length, `characters saved. (${measure.nanoseconds()})`)
-  })
+    let logger = loggerCreate('debuger')
+    logger.log(`notify message`, message.length, `characters saved. (${measure.nanoseconds()})`)
+  }
 })

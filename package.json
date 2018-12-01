@@ -5,36 +5,45 @@
   "main": "index.js",
   "scripts": {
     "dev": "node test/index.js",
-    "dev:win": "cls && npm run eslint",
     "eslint": "eslint --ext .js --ignore-path .eslintignore .",
     "test": "npm run eslint && env-cmd test/.env mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/touno-project/module.core-systems.git"
+    "url": "git+https://github.com/touno-io/node_debuger.git"
   },
+  "files":[
+    "package.json",
+    "index.js",
+    "LICENSE",
+    "README.MD",
+    "helper/debuger/index.js",
+    "helper/debuger/logger.js",
+    "helper/mongodb/index.js",
+    "helper/raven.js"
+  ],
   "keywords": [
     "touno.io",
-    "module"
+    "module",
+    "log",
+    "raven",
+    "audit"
   ],
-  "author": "Mr.Kananek Thongkam",
+  "author": "Kananek Thongkam",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/touno-project/module.core-systems/issues"
+    "url": "https://github.com/touno-io/node_debuger/issues"
   },
-  "homepage": "https://github.com/touno-project/module.core-systems#readme",
-  "optionalDependencies": {
-    "fsevents": "*"
-  },
+  "homepage": "https://github.com/touno-io/node_debuger#readme",
   "dependencies": {
     "chalk": "^2.4.1",
     "moment": "^2.22.2",
+    "moment-timezone": "^0.5.23",
     "mongoose": "^5.3.14",
     "numeral": "^2.0.6",
     "raven": "^2.6.4",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2",
-    "simple-oauth2": "^2.2.1"
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",

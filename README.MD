@@ -3,16 +3,13 @@
 ### Requirement Environment
 ```ini
 RAVEN_CONFIG=https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}
+MONGODB_DEBUGER_URI=mongodb://localhost:27017/?authMode=scram-sha1&authSource=admin
 ```
 
 ----------
 ### Helper
 ##### `object` debuger
   - **log** `function(...msg)` message log normal
-  - **progress** `object`
-    - begin `function(...msg)`
-    - set `function(min, max)`
-    - end `function(...msg)`
   - **start** `function(...msg)` start log and color green.
   - **success** `function(...msg)` start log and color green.
   - **info** `function(...msg)` info log and color blue.
@@ -20,7 +17,7 @@ RAVEN_CONFIG=https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}
 
 **sample**
 ```javascript
-import { debuger } from 'touno.io'
+import { debuger } from '@touno.io/debuger'
 
 debuger.log('')
 debuger.success('completed.')
@@ -31,6 +28,13 @@ debuger.error(new Error('Error Test'))
   - **set** `function(config)` set config Raven object on exception.
   - **error** `function(ex)` reporting error to sentry.
   - **warning** `function(ex)` reporting warning to sentry.
+
+##### `object` Other
+  - **DevMode** `boolean` Development.
+  - **DebugMode** `boolean` Server Debuging logs.
+  - **IsWindows** `boolean` check windows version
+  - **IsLinux** `boolean` check linux version
+
 ----------
 ### License
 MIT © 2018 Touno™
