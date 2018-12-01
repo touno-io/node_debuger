@@ -1,6 +1,7 @@
 const chalk = require('chalk')
 const moment = require('moment')
 const Time = require('./../time')
+const db = require('./../mongodb')
 const { DevMode, DebugMode } = require('../variable')
 
 const groupSize = 6
@@ -17,8 +18,7 @@ const logWindows = async (scope, icon, title, color, msg) => {
     msg2.push(chalk.cyan('»'))
   }
   if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
-  if (DevMode) return
-  const db = require('./../mongodb')
+
   let { Audit } = await db.open()
   if (!Audit) return
   await new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'window', scope ] }).save()
@@ -29,11 +29,10 @@ const logLinux = async (scope, icon, msg) => {
   if (scope) msg2.push(`[${scope.toUpperCase()}]`)
 
   if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
-  if (DevMode) return
-  const db = require('./../mongodb')
+
   let { Audit } = await db.open()
   if (!Audit) return
-  await new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'window', scope ] }).save()
+  await new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }).save()
 }
 
 module.exports = scopeName => {

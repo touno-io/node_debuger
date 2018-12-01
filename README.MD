@@ -1,10 +1,12 @@
-# node_debuger
+# @touno-io/debuger
+
 
 ### Requirement Environment
 ```ini
 RAVEN_CONFIG=https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}
 MONGODB_DEBUGER_URI=mongodb://localhost:27017/?authMode=scram-sha1&authSource=admin
 ```
+When `MONGODB_DEBUGER_URI` == `undefined` module not insert log to mongodb and like `RAVEN_CONFIG`. 
 
 ----------
 ### Helper

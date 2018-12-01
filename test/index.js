@@ -18,16 +18,16 @@ describe('Folder -- helper', () => {
 
     done()
   })
-  it('Functional -- raven', done => {
-    const Raven = require('../helper/raven')
-    Raven.install({}, 'unit-testing')
-    Raven.warning('test message')
-    Raven.error(new Error('Testing Error.'))
-    Raven.ProcessClosed(process, async () => {})
-    Raven.Tracking(async () => {
-      done()
-    })
-  })
+  // it('Functional -- raven', done => {
+  //   const Raven = require('../helper/raven')
+  //   Raven.install({}, 'unit-testing')
+  //   Raven.warning('test message')
+  //   Raven.error(new Error('Testing Error.'))
+  //   Raven.ProcessClosed(process, async () => {})
+  //   Raven.Tracking(async () => {
+  //     done()
+  //   })
+  // })
   it('Functional -- time', done => {
     const Time = require('../helper/time')
     let elapsed = new Time()
