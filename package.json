@@ -1,7 +1,7 @@
 {
   "name": "@touno-io/debuger",
   "version": "1.0.0",
-  "description": "Global data and oauth in all projects.",
+  "description": "debuger beautiful message logs and insert log to mongodb.",
   "main": "index.js",
   "scripts": {
     "dev": "node test/index.js",
