@@ -6,7 +6,15 @@
 RAVEN_CONFIG=https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}
 MONGODB_DEBUGER_URI=mongodb://localhost:27017/?authMode=scram-sha1&authSource=admin
 ```
-When `MONGODB_DEBUGER_URI` == `undefined` module not insert log to mongodb and like `RAVEN_CONFIG`. 
+
+When `MONGODB_DEBUGER_URI` or `RAVEN_CONFIG` is no setting in the environment, module will not insert a database.
+
+### Installation
+```bash
+npm i @touno-io/debuger
+// or
+yarn i @touno-io/debuger
+```
 
 ----------
 ### Helper
@@ -36,6 +44,11 @@ debuger.error(new Error('Error Test'))
   - **DebugMode** `boolean` Server Debuging logs.
   - **IsWindows** `boolean` check windows version
   - **IsLinux** `boolean` check linux version
+
+**sample**
+```javascript
+import { DevMode, IsWindows } from '@touno.io/debuger'
+```
 
 ----------
 ### License
