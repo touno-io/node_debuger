@@ -1,6 +1,6 @@
 {
   "name": "@touno-io/debuger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "debuger beautiful message logs and insert log to mongodb.",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/touno-io/node_debuger.git"
   },
-  "files":[
+  "files": [
     "package.json",
     "index.js",
     "LICENSE",
