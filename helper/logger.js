@@ -1,16 +1,16 @@
 const chalk = require('chalk')
 const moment = require('moment')
-const Time = require('./../time')
-const db = require('./../mongodb')
-const { DevMode, DebugMode } = require('../variable')
+const Time = require('./time')
+const db = require('./mongodb')
+const { DevMode, DebugMode } = require('./variable')
 
 const groupSize = 6
-const scopeSize = 8
+const scopeSize = 9
 const groupPadding = (msg, size, pad) => {
   return msg.length > size ? msg.substr(0, size) : msg[pad](size, ' ')
 }
 
-const logWindows = async (scope, icon, title, color, msg) => {
+const logWindows = (scope, icon, title, color, msg) => {
   let msg2 = [ chalk.gray(moment().format('HH:mm:ss.SSS')), color(icon) ]
   msg2.push(color(groupPadding(title, groupSize, 'padStart')))
   if (scope) {
@@ -19,26 +19,27 @@ const logWindows = async (scope, icon, title, color, msg) => {
   }
   if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
 
-  let { Audit } = await db.open()
+  let { Audit } = db.open()
   if (!Audit) return
-  await new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'window', scope ] }).save()
+  new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'window', scope ] }).save()
 }
 
-const logLinux = async (scope, icon, msg) => {
+const logLinux = (scope, icon, msg) => {
   let msg2 = [ moment().format('YYYY-MM-DD HH:mm:ss.SSS'), (!icon ? '…' : icon) ]
   if (scope) msg2.push(`[${scope.toUpperCase()}]`)
 
   if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
 
-  let { Audit } = await db.open()
-  if (!Audit) return
-  await new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }).save()
+  db.open().then(({ Audit }) => {
+    if (!Audit) return
+    return new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }).save()
+  })
 }
 
 module.exports = scopeName => {
   let measure = null
   return {
-    async log (...msg) {
+    log (...msg) {
       if (!DevMode) return
       let msg2 = [ chalk.gray(moment().format('HH:mm:ss.SSS')), chalk.gray.bold('…') ]
       msg2.push(measure ? groupPadding(measure.nanoseconds(), groupSize, 'padStart') : chalk.gray.bold(groupPadding('debug', groupSize, 'padStart')))
@@ -48,21 +49,21 @@ module.exports = scopeName => {
       }
       console.log(...(msg2.concat(msg)))
     },
-    async start (...msg) {
+    start (...msg) {
       measure = new Time()
-      if (DevMode) await logWindows(scopeName, '○', 'start', chalk.cyan.bold, msg); else await logLinux(scopeName, '○', msg)
+      if (DevMode) logWindows(scopeName, '○', 'start', chalk.cyan.bold, msg); else logLinux(scopeName, '○', msg)
     },
-    async success (...msg) {
+    success (...msg) {
       if (measure) msg.push(`(${measure.total()})`)
-      if (DevMode) await logWindows(scopeName, '●', 'success', chalk.green.bold, msg); else await logLinux(scopeName, '●', msg)
+      if (DevMode) logWindows(scopeName, '●', 'success', chalk.green.bold, msg); else logLinux(scopeName, '●', msg)
       measure = null
     },
-    async warning (...msg) {
-      if (DevMode) await logWindows(scopeName, '▲', 'warning', chalk.yellow.bold, msg); else await logLinux(scopeName, '▲', msg)
+    warning (...msg) {
+      if (DevMode) logWindows(scopeName, '▲', 'warning', chalk.yellow.bold, msg); else logLinux(scopeName, '▲', msg)
       measure = null
     },
-    async info (...msg) {
-      if (DevMode) await logWindows(scopeName, '╍', 'info', chalk.blue.bold, msg); else await logLinux(scopeName, null, msg)
+    info (...msg) {
+      if (DevMode) logWindows(scopeName, '╍', 'info', chalk.blue.bold, msg); else logLinux(scopeName, null, msg)
     },
     async error (ex) {
       if (!ex) return
@@ -73,14 +74,14 @@ module.exports = scopeName => {
           console.log(require('youch-terminal')(output))
         } else {
           let excep = /at.*?\((.*?)\)/i.exec(ex.stack) || []
-          await logLinux(scopeName, 'х', [ ex.message.indexOf('Error:') === 0 ? ex.message.replace('Error:', 'ERROR-Message:') : `ERROR-Message: ${ex.message}` ])
-          await logLinux(scopeName, 'х', [ `ERROR-File: ${excep[1] ? excep[1] : 'N/A'}`, ex.message ])
-          require('../raven').error(ex)
+          logLinux(scopeName, 'х', [ ex.message.indexOf('Error:') === 0 ? ex.message.replace('Error:', 'ERROR-Message:') : `ERROR-Message: ${ex.message}` ])
+          logLinux(scopeName, 'х', [ `ERROR-File: ${excep[1] ? excep[1] : 'N/A'}`, ex.message ])
+          require('./raven').error(ex)
         }
       } else {
         let msg = [ ex.toString() ]
         if (measure) msg.push(`(${measure.total()})`)
-        if (DevMode) await logWindows(scopeName, 'х', 'error', chalk.red.bold, msg); else await logLinux(scopeName, 'х', msg)
+        if (DevMode) logWindows(scopeName, 'х', 'error', chalk.red.bold, msg); else logLinux(scopeName, 'х', msg)
       }
     }
   }

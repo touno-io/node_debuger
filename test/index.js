@@ -2,7 +2,7 @@ const logger = require('mocha-logger')
 
 describe('Folder -- helper', () => {
   it('Functional -- debuger', done => {
-    const debuger = require('../helper/debuger')
+    const debuger = require('../index')
     debuger.start('start message.')
     debuger.log('logmessage.')
     debuger.info('info message.')
@@ -10,11 +10,11 @@ describe('Folder -- helper', () => {
     debuger.success('success message.')
   
     const scope = debuger.scope('UnitTest')
-    scope.log('log message with scope.')
     scope.start('start message with scope.')
-    scope.success('success message with scope.')
+    scope.log('log message with scope.')
     scope.info('info message with scope.')
     scope.error(new Error('error Class.'))
+    scope.success('success message with scope.')
 
     done()
   })
@@ -29,7 +29,7 @@ describe('Folder -- helper', () => {
   //   })
   // })
   it('Functional -- time', done => {
-    const Time = require('../helper/time')
+    const { Time } = require('../index')
     let elapsed = new Time()
     logger.log(elapsed.seconds())
     logger.log(elapsed.nanoseconds())
@@ -37,7 +37,7 @@ describe('Folder -- helper', () => {
     done()
   })
   it('Functional -- variable', done => {
-    const { DevMode, DebugMode, IsLinux, IsWindows } = require('../helper/variable')
+    const { DevMode, DebugMode, IsLinux, IsWindows } = require('../index')
     logger.log(`DevMode: ${DevMode}`)
     logger.log(`DebugMode: ${DebugMode}`)
     logger.log(`IsLinux: ${IsLinux}`)

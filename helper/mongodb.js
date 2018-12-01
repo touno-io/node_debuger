@@ -4,18 +4,9 @@ module.exports = {
   open: async () => {
     if (!process.env.MONGODB_DEBUGER_URI) return { connected: () => false }
     let conn = await mongoose.createConnection(process.env.MONGODB_DEBUGER_URI, { useCreateIndex: true, useNewUrlParser: true, connectTimeoutMS: 10000 })
-    const logger = require('../debuger').scope('MongoDB')
 
     conn.connected = () => conn.readyState === 1
-    conn.close = async () => {
-      await conn.close()
-      logger.log(`Connected. mongodb://[@touno-io/debuger]/log-audit`)
-    }
-
-    conn.close = async () => {
-      await conn.close()
-      logger.log(`Closed. mongodb://[@touno-io/debuger]/log-audit`)
-    }
+    conn.close = async () => { await conn.close() }
 
     conn.Audit = conn.model('log-audit', mongoose.Schema({
       type: {

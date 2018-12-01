@@ -27,7 +27,7 @@ yarn i @touno-io/debuger
 
 **sample**
 ```javascript
-import { debuger } from '@touno.io/debuger'
+import debuger from '@touno.io/debuger'
 
 debuger.log('')
 debuger.success('completed.')
