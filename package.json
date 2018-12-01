@@ -20,7 +20,9 @@
     "helper/debuger/index.js",
     "helper/debuger/logger.js",
     "helper/mongodb/index.js",
-    "helper/raven.js"
+    "helper/raven.js",
+    "helper/time.js",
+    "helper/variable.js"
   ],
   "keywords": [
     "touno.io",
