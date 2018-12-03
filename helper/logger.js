@@ -1,7 +1,6 @@
 const chalk = require('chalk')
 const moment = require('moment')
 const Time = require('./time')
-const db = require('./mongodb')
 const { DevMode, DebugMode } = require('./variable')
 
 const groupSize = 6
@@ -18,10 +17,11 @@ const logWindows = (scope, icon, title, color, msg) => {
     msg2.push(chalk.cyan('»'))
   }
   if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
-
-  let { Audit } = db.open()
-  if (!Audit) return
-  new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'window', scope ] }).save()
+  return { created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'windows', scope ] }
+  // db.open().then(({ Audit }) => {
+  //   if (!Audit) return
+  //   return new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'windows', scope ] }).save()
+  // })
 }
 
 const logLinux = (scope, icon, msg) => {
@@ -29,11 +29,11 @@ const logLinux = (scope, icon, msg) => {
   if (scope) msg2.push(`[${scope.toUpperCase()}]`)
 
   if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
-
-  db.open().then(({ Audit }) => {
-    if (!Audit) return
-    return new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }).save()
-  })
+  return { created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }
+  // db.open().then(({ Audit }) => {
+  //   if (!Audit) return
+  //   return new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }).save()
+  // })
 }
 
 module.exports = scopeName => {
@@ -51,19 +51,19 @@ module.exports = scopeName => {
     },
     start (...msg) {
       measure = new Time()
-      if (DevMode) logWindows(scopeName, '○', 'start', chalk.cyan.bold, msg); else logLinux(scopeName, '○', msg)
+      return DevMode ? logWindows(scopeName, '○', 'start', chalk.cyan.bold, msg) : logLinux(scopeName, '○', msg)
     },
     success (...msg) {
       if (measure) msg.push(`(${measure.total()})`)
-      if (DevMode) logWindows(scopeName, '●', 'success', chalk.green.bold, msg); else logLinux(scopeName, '●', msg)
       measure = null
+      return DevMode ? logWindows(scopeName, '●', 'success', chalk.green.bold, msg) : logLinux(scopeName, '●', msg)
     },
     warning (...msg) {
-      if (DevMode) logWindows(scopeName, '▲', 'warning', chalk.yellow.bold, msg); else logLinux(scopeName, '▲', msg)
       measure = null
+      return DevMode ? logWindows(scopeName, '▲', 'warning', chalk.yellow.bold, msg) : logLinux(scopeName, '▲', msg)
     },
     info (...msg) {
-      if (DevMode) logWindows(scopeName, '╍', 'info', chalk.blue.bold, msg); else logLinux(scopeName, null, msg)
+      return DevMode ? logWindows(scopeName, '╍', 'info', chalk.blue.bold, msg) : logLinux(scopeName, null, msg)
     },
     async error (ex) {
       if (!ex) return
@@ -72,16 +72,18 @@ module.exports = scopeName => {
           const Youch = require('youch')
           let output = await new Youch(ex, {}).toJSON()
           console.log(require('youch-terminal')(output))
+          return null
         } else {
           let excep = /at.*?\((.*?)\)/i.exec(ex.stack) || []
-          logLinux(scopeName, 'х', [ ex.message.indexOf('Error:') === 0 ? ex.message.replace('Error:', 'ERROR-Message:') : `ERROR-Message: ${ex.message}` ])
+          let result1 = logLinux(scopeName, 'х', [ ex.message.indexOf('Error:') === 0 ? ex.message.replace('Error:', 'ERROR-Message:') : `ERROR-Message: ${ex.message}` ])
           logLinux(scopeName, 'х', [ `ERROR-File: ${excep[1] ? excep[1] : 'N/A'}`, ex.message ])
           require('./raven').error(ex)
+          return result1
         }
       } else {
         let msg = [ ex.toString() ]
         if (measure) msg.push(`(${measure.total()})`)
-        if (DevMode) logWindows(scopeName, 'х', 'error', chalk.red.bold, msg); else logLinux(scopeName, 'х', msg)
+        return DevMode ? logWindows(scopeName, 'х', 'error', chalk.red.bold, msg) : logLinux(scopeName, 'х', msg)
       }
     }
   }

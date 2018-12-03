@@ -1,6 +1,6 @@
 {
   "name": "@touno-io/debuger",
-  "version": "1.2.0",
+  "version": "1.1.0",
   "description": "debuger beautiful message logs and insert log to mongodb.",
   "main": "index.js",
   "scripts": {
@@ -17,9 +17,8 @@
     "index.js",
     "LICENSE",
     "README.MD",
-    "helper/debuger/index.js",
-    "helper/debuger/logger.js",
-    "helper/mongodb/index.js",
+    "helper/logger.js",
+    "helper/mongodb.js",
     "helper/raven.js",
     "helper/time.js",
     "helper/variable.js"

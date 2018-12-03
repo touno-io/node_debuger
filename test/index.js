@@ -2,7 +2,10 @@ const logger = require('mocha-logger')
 
 describe('Folder -- helper', () => {
   it('Functional -- debuger', done => {
-    const debuger = require('../index')
+    const { debuger } = require('../index')
+    debuger.audit('start message with debuger.')
+    debuger.LINE('start message with scope.')
+
     debuger.start('start message.')
     debuger.log('logmessage.')
     debuger.info('info message.')

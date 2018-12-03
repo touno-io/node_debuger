@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 
+let conn = { connected: () => false }
 module.exports = {
   open: async () => {
-    if (!process.env.MONGODB_DEBUGER_URI) return { connected: () => false }
-    let conn = await mongoose.createConnection(process.env.MONGODB_DEBUGER_URI, { useCreateIndex: true, useNewUrlParser: true, connectTimeoutMS: 10000 })
+    if (!process.env.MONGODB_DEBUGER_URI) return conn
+    if (!conn.connected()) conn = await mongoose.createConnection(process.env.MONGODB_DEBUGER_URI, { useCreateIndex: true, useNewUrlParser: true, connectTimeoutMS: 10000 })
 
     conn.connected = () => conn.readyState === 1
     conn.close = async () => { await conn.close() }
