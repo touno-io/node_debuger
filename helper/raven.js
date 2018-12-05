@@ -1,8 +1,9 @@
 const Raven = require('raven')
 const { DevMode } = require('./variable')
+const logger = require('./logger')('raven')
 
 let config = null
-let logger = console
+
 let report = {
   warning (ex) {
     Raven.captureMessage(ex instanceof Error ? ex : new Error(ex), { level: 'warning' })
@@ -15,21 +16,26 @@ let report = {
 const killProcess = async (proc, OnExitProcess) => {
   logger.log('Got SIGINT.  Press Control-C to exit.')
   if (!(OnExitProcess instanceof Function)) throw new Error('OnExitProcess not Promise.')
-  try { await OnExitProcess() } catch (ex) { report.error(ex) }
+  try {
+    await OnExitProcess()
+  } catch (ex) {
+    await logger.error(ex)
+    report.error(ex)
+  }
   proc.exit()
 }
 
 module.exports = {
-  warning: report.warning,
-  error: report.error,
-  async Tracking (OnAsyncCallback, IsExitAfterError = false) {
+  ...report,
+  async Tracking (OnAsyncCallback, IsNoExitAfterError = false) {
     // if (!config || !name) throw new Error('Raven not set configuration.')
-    // if (!(OnAsyncCallback instanceof Function)) throw new Error('Tracking not Promise.')
     try {
+      if (!(OnAsyncCallback instanceof Function)) throw new Error('Tracking not Promise.')
       await OnAsyncCallback()
     } catch (ex) {
+      await logger.error(ex)
       report.error(ex)
-      if (!IsExitAfterError) process.exit(0)
+      if (!IsNoExitAfterError) process.exit(0)
     }
   },
   ProcessClosed (proc, OnExitProcess) {
@@ -38,10 +44,13 @@ module.exports = {
   },
   install (data, log) {
     config = data
-    logger = log
+    process.on('SIGINT', async () => killProcess(process, async () => {}))
+    process.on('SIGTERM', async () => killProcess(process, async () => {}))
     Raven.config(!DevMode && process.env.RAVEN_CONFIG).install((err, initialErr) => {
-      logger.error(err || initialErr)
-      process.exit(1)
+      logger.error(err || initialErr).then(() => {
+        report.error(err || initialErr)
+        process.exit(1)
+      })
     })
   }
 }

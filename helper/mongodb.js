@@ -8,7 +8,6 @@ module.exports = {
 
     conn.connected = () => conn.readyState === 1
     conn.close = async () => {
-      console.log('connected close.')
       await conn.close()
     }
 

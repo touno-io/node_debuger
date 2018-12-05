@@ -22,11 +22,9 @@ module.exports = {
   ...vars,
   Time,
   Raven,
-  debuger: Object.assign(lgCreate(), {
-    scope (name) {
-      return lgCreate(name)
-    },
-    async dbScope (name) {
+  logger: lgCreate,
+  debuger: {
+    async scope (name) {
       let { Audit } = await db.open()
       return lgCreate(name, Audit)
     },
@@ -46,12 +44,12 @@ module.exports = {
 
       let measure = new Time()
       let logger = lgCreate('notify')
-      const db = require('./helper/mongodb')
+
       let { Notify } = await db.open()
       if (!Notify) return logger.log(moment(schedule).format('DD-MM-YYYY HH:mm:ss'), message)
 
       await new Notify({ endpoint: endpoint, message: message, notify: false, schedule: schedule, created: new Date() }).save()
       logger.log(`message`, message.length, `characters saved. (${measure.nanoseconds()})`)
     }
-  })
+  }
 }
