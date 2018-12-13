@@ -7,25 +7,17 @@ describe('node_debuger', () => {
   let connClose
 
   before(async () => {
-    scope1 = main.debuger
-    scope2 = main.debuger.scope('scope2')
+    scope1 = main.logger
+    scope2 = main.logger('scope2')
   })
 
   describe('#logger()', () => {
     it('message', async () => {
-      scope1.start('start message.')
-      scope1.log('log message.')
-      scope1.info('info message.')
-      scope1.error(new Error('error message.'))
-      scope1.success('success message.')
-    })
-
-    it('message with scope', async () => {
-      scope2.start('start message.')
-      scope2.log('logmessage.')
-      scope2.info('info message.')
-      scope2.error(new Error('error message.'))
-      scope2.success('success message.')
+      scope2.start('start.')
+      scope2.log('log.')
+      scope2.info('info.')
+      scope2.error(new Error('error.'))
+      scope2.success('success.')
     })
   })
 

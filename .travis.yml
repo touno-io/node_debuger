@@ -4,6 +4,7 @@ node_js:
 
 before_script:
   - npm i
+  - npm i --only=dev
 
 script:
   - npm test

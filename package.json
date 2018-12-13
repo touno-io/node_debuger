@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node test/index.js",
     "eslint": "eslint --ext .js --ignore-path .eslintignore .",
-    "test": "npm run eslint && env-cmd test/.env mocha"
+    "test": "npm run eslint && env-cmd test/.env mocha",
+    "test2": "npm run eslint && env-cmd test/.env node test/manual.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,6 @@
     "LICENSE",
     "README.MD",
     "helper/logger.js",
-    "helper/mongodb.js",
     "helper/raven.js",
     "helper/time.js",
     "helper/variable.js"
@@ -37,10 +37,9 @@
   },
   "homepage": "https://github.com/touno-io/node_debuger#readme",
   "dependencies": {
+    "@touno-io/db": "^1.1.0",
     "chalk": "^2.4.1",
     "moment": "^2.22.2",
-    "moment-timezone": "^0.5.23",
-    "mongoose": "^5.3.14",
     "numeral": "^2.0.6",
     "raven": "^2.6.4",
     "request": "^2.88.0",

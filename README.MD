@@ -4,10 +4,12 @@
 ### Requirement Environment
 ```ini
 RAVEN_CONFIG=https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}
-MONGODB_DEBUGER_URI=mongodb://localhost:27017/?authMode=scram-sha1&authSource=admin
+MONGODB_DEBUGER=true
+MONGODB_ADMIN=
+MONGODB_SERVER=localhost:27017
 ```
 
-When `MONGODB_DEBUGER_URI` or `RAVEN_CONFIG` is no setting in the environment, module will not insert a database.
+When `MONGODB_DEBUGER` or `RAVEN_CONFIG` is no setting in the environment, module will not insert a database.
 
 ### Installation
 ```bash

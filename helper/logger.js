@@ -1,15 +1,16 @@
 const chalk = require('chalk')
 const moment = require('moment')
 const Time = require('./time')
-const { DevMode, DebugMode } = require('./variable')
+const { touno } = require('@touno-io/db/mongo')
+const { DevMode } = require('./variable')
 
-const groupSize = 6
+const groupSize = 7
 const scopeSize = 9
 const groupPadding = (msg, size, pad) => {
   return msg.length > size ? msg.substr(0, size) : msg[pad](size, ' ')
 }
 
-module.exports = (scopeName = null, Audit = null) => {
+module.exports = (scopeName = null, isSaveLog = false) => {
   let measure = null
 
   const logWindows = (scope, icon, title, color, msg) => {
@@ -19,18 +20,22 @@ module.exports = (scopeName = null, Audit = null) => {
       msg2.push(groupPadding(scope, scopeSize, 'padEnd'))
       msg2.push(chalk.cyan('»'))
     }
-    if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
-    if (!Audit) return Promise.resolve()
-    return new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'windows', scope ] }).save()
+    console.log(...(msg2.concat(msg)))
+    if (!isSaveLog || !process.env.MONGODB_SERVER) return Promise.resolve()
+
+    let data = { created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'windows', scope ] }
+    return touno.open().then(({ LogAudit }) => new LogAudit(data).save())
   }
 
   const logLinux = (scope, icon, msg) => {
     let msg2 = [ moment().format('YYYY-MM-DD HH:mm:ss.SSS'), (!icon ? '…' : icon) ]
     if (scope) msg2.push(`[${scope.toUpperCase()}]`)
 
-    if (DevMode || DebugMode) console.log(...(msg2.concat(msg)))
-    if (!Audit) return Promise.resolve()
-    return new Audit({ created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }).save()
+    console.log(...(msg2.concat(msg)))
+    if (!isSaveLog || !process.env.MONGODB_SERVER) return Promise.resolve()
+
+    let data = { created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }
+    return touno.open().then(({ LogAudit }) => new LogAudit(data).save())
   }
 
   return {
@@ -67,12 +72,9 @@ module.exports = (scopeName = null, Audit = null) => {
           const Youch = require('youch')
           let output = await new Youch(ex, {}).toJSON()
           console.log(require('youch-terminal')(output))
-          return Promise.resolve()
         } else {
           let excep = /at.*?\((.*?)\)/i.exec(ex.stack) || []
-          let result1 = logLinux(scopeName, 'х', [ ex.message.indexOf('Error:') === 0 ? ex.message.replace('Error:', 'ERROR-Message:') : `ERROR-Message: ${ex.message}` ])
-          logLinux(scopeName, 'х', [ `ERROR-File: ${excep[1] ? excep[1] : 'N/A'}`, ex.message ])
-          return result1
+          return logLinux(scopeName, 'х', [ 'ERROR::', excep[1] ? excep[1] : 'N/A', '\n', ex.message, '\n' ])
         }
       } else {
         let msg = [ ex.toString() ]
