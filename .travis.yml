@@ -7,7 +7,7 @@ before_script:
   - npm i --only=dev
 
 script:
-  - npm test
+  - npm run test2
 
 cache:
   directories:
