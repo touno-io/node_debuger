@@ -43,7 +43,8 @@
     "numeral": "^2.0.6",
     "raven": "^2.6.4",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "terminate": "^2.1.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
