@@ -12,26 +12,24 @@ let report = {
     Raven.captureException(ex instanceof Error ? ex : new Error(ex), config)
   }
 }
-const onExit = pid => {
-  process.kill(pid)
-  process.kill()
-}
 
-const onKillProcess = async (pid, OnExitProcess) => {
-  logger.log(`Got SIGINT:${pid}.  Press Control-C to exit.`)
-  if (!(OnExitProcess instanceof Function)) throw new Error('OnExitProcess not Promise.')
-  try {
-    await OnExitProcess()
-  } catch (ex) {
-    await logger.error(ex)
-    report.error(ex)
+const killProcess = async (proc, OnExitProcess) => {
+  logger.log('Got SIGINT.  Press Control-C to exit.')
+  if (!OnExitProcess) {
+    if (!(OnExitProcess instanceof Function)) throw new Error('OnExitProcess not Promise.')
+    try {
+      await OnExitProcess()
+    } catch (ex) {
+      await logger.error(ex)
+      report.error(ex)
+    }
   }
-  onExit(pid)
+  proc.exit()
 }
 
 module.exports = {
   ...report,
-  async Tracking (OnAsyncCallback, IsExitAfterError = true) {
+  async Tracking (OnAsyncCallback, IsNoExitAfterError = false) {
     // if (!config || !name) throw new Error('Raven not set configuration.')
     try {
       if (!(OnAsyncCallback instanceof Function)) throw new Error('Tracking not Promise.')
@@ -39,21 +37,21 @@ module.exports = {
     } catch (ex) {
       await logger.error(ex)
       report.error(ex)
-      if (IsExitAfterError) onExit(process.pid)
+      if (!IsNoExitAfterError) process.exit(0)
     }
   },
-  ProcessClosed (proc, onProcessExit) {
-    proc.on('SIGINT', async () => onKillProcess(proc.pid, onProcessExit))
-    proc.on('SIGTERM', async () => onKillProcess(proc.pid, onProcessExit))
+  ProcessClosed (proc, OnExitProcess) {
+    proc.on('SIGINT', async () => killProcess(proc, OnExitProcess))
+    proc.on('SIGTERM', async () => killProcess(proc, OnExitProcess))
   },
-  install (data, onProcessExit = async () => {}) {
+  install (data) {
     config = data
-    process.on('SIGINT', async () => onKillProcess(process.pid, onProcessExit))
-    process.on('SIGTERM', async () => onKillProcess(process.pid, onProcessExit))
+    process.on('SIGINT', async () => killProcess(process, null))
+    process.on('SIGTERM', async () => killProcess(process, null))
     Raven.config(!DevMode && process.env.RAVEN_CONFIG).install((err, initialErr) => {
       logger.error(err || initialErr).then(() => {
         report.error(err || initialErr)
-        onExit(process.pid)
+        process.exit(1)
       })
     })
   }
