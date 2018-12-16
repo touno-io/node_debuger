@@ -23,18 +23,18 @@ module.exports = (scopeName = null, isSaveLog = false) => {
     console.log(...(msg2.concat(msg)))
     if (!isSaveLog || !process.env.MONGODB_SERVER) return Promise.resolve()
 
-    let data = { created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'windows', scope ] }
+    let data = { created: new Date(), type: title, scope: scope, message: msg.join(' '), tag: [ 'windows', scope, 'logger' ] }
     return touno.open().then(({ LogAudit }) => new LogAudit(data).save())
   }
 
-  const logLinux = (scope, icon, msg) => {
+  const logLinux = (scope, icon, title, msg) => {
     let msg2 = [ moment().format('YYYY-MM-DD HH:mm:ss.SSS'), (!icon ? '…' : icon) ]
     if (scope) msg2.push(`[${scope.toUpperCase()}]`)
 
     console.log(...(msg2.concat(msg)))
     if (!isSaveLog || !process.env.MONGODB_SERVER) return Promise.resolve()
 
-    let data = { created: new Date(), type: 'logger', scope: scope, message: msg.join(' '), tag: [ 'linux', scope ] }
+    let data = { created: new Date(), type: title, scope: scope, message: msg.join(' '), tag: [ 'linux', scope, 'logger' ] }
     return touno.open().then(({ LogAudit }) => new LogAudit(data).save())
   }
 
@@ -51,19 +51,19 @@ module.exports = (scopeName = null, isSaveLog = false) => {
     },
     start (...msg) {
       measure = new Time()
-      return DevMode ? logWindows(scopeName, '○', 'start', chalk.cyan.bold, msg) : logLinux(scopeName, '○', msg)
+      return DevMode ? logWindows(scopeName, '○', 'start', chalk.cyan.bold, msg) : logLinux(scopeName, '○', 'start', msg)
     },
     success (...msg) {
       if (measure) msg.push(`(${measure.total()})`)
       measure = null
-      return DevMode ? logWindows(scopeName, '●', 'success', chalk.green.bold, msg) : logLinux(scopeName, '●', msg)
+      return DevMode ? logWindows(scopeName, '●', 'success', chalk.green.bold, msg) : logLinux(scopeName, '●', 'success', msg)
     },
     warning (...msg) {
       measure = null
-      return DevMode ? logWindows(scopeName, '▲', 'warning', chalk.yellow.bold, msg) : logLinux(scopeName, '▲', msg)
+      return DevMode ? logWindows(scopeName, '▲', 'warning', chalk.yellow.bold, msg) : logLinux(scopeName, '▲', 'warning', msg)
     },
     info (...msg) {
-      return DevMode ? logWindows(scopeName, '╍', 'info', chalk.blue.bold, msg) : logLinux(scopeName, null, msg)
+      return DevMode ? logWindows(scopeName, '╍', 'info', chalk.blue.bold, msg) : logLinux(scopeName, null, 'info', msg)
     },
     async error (ex) {
       if (!ex) return
@@ -74,12 +74,12 @@ module.exports = (scopeName = null, isSaveLog = false) => {
           console.log(require('youch-terminal')(output))
         } else {
           let excep = /at.*?\((.*?)\)/i.exec(ex.stack) || []
-          return logLinux(scopeName, 'х', [ 'ERROR::', excep[1] ? excep[1] : 'N/A', '\n', ex.message, '\n' ])
+          return logLinux(scopeName, 'х', 'error', [ 'ERROR::', excep[1] ? excep[1] : 'N/A', '\n', ex.message, '\n' ])
         }
       } else {
         let msg = [ ex.toString() ]
         if (measure) msg.push(`(${measure.total()})`)
-        return DevMode ? logWindows(scopeName, 'х', 'error', chalk.red.bold, msg) : logLinux(scopeName, 'х', msg)
+        return DevMode ? logWindows(scopeName, 'х', 'error', chalk.red.bold, msg) : logLinux(scopeName, 'х', 'error', msg)
       }
     }
   }
