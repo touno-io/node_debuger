@@ -9,7 +9,7 @@ const moment = require('moment')
 const saved = process.env.MONGODB_DEBUGER === 'true'
 timezone.tz.setDefault(process.env.TZ || 'Asia/Bangkok')
 
-if (vars.DevMode) {
+if (!module.parent) {
   try {
     require.resolve('youch')
     require.resolve('youch-terminal')

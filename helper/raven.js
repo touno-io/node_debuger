@@ -1,15 +1,13 @@
 const Raven = require('raven')
 const { DevMode } = require('./variable')
 const logger = require('./logger')('raven')
-
-let config = null
-
+let pkg = {}
 let report = {
   warning (ex) {
     Raven.captureMessage(ex instanceof Error ? ex : new Error(ex), { level: 'warning' })
   },
   error (ex) {
-    Raven.captureException(ex instanceof Error ? ex : new Error(ex), config)
+    Raven.captureException(ex instanceof Error ? ex : new Error(ex))
   }
 }
 
@@ -29,7 +27,7 @@ const killProcess = async (proc, OnExitProcess, manual) => {
 const Tracking = async (OnAsyncCallback, IsNoExitAfterError = false) => {
   try {
     if (!(OnAsyncCallback instanceof Function)) throw new Error('Tracking not Promise.')
-    await OnAsyncCallback()
+    await OnAsyncCallback(pkg)
   } catch (ex) {
     await logger.error(ex)
     if (OnAsyncCallback instanceof Function) report.error(ex)
@@ -45,7 +43,7 @@ module.exports = {
     proc.on('SIGTERM', async () => killProcess(proc, OnExitProcess, true))
   },
   install (data, OnExitProcess) {
-    config = data
+    pkg = data.pkg ? require(data.pkg) : data
     process.on('SIGINT', async () => killProcess(process, OnExitProcess))
     process.on('SIGTERM', async () => killProcess(process, OnExitProcess))
     Raven.config(!DevMode && process.env.RAVEN_CONFIG).install((err, initialErr) => {

@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "node test/index.js",
     "eslint": "eslint --ext .js --ignore-path .eslintignore .",
-    "test": "npm run eslint && env-cmd test/.env mocha",
-    "test2": "npm run eslint && env-cmd test/.env node test/manual.js"
+    "test": "npm run eslint && env-cmd test/.env mocha"
   },
   "repository": {
     "type": "git",

@@ -2,18 +2,38 @@ language: node_js
 node_js:
   - "stable"
 
+env:
+  - TZ=Asia/Bangkok
+  - NODE_ENV=production
+  - MONGODB_DEBUGER=false
+
 before_script:
   - npm i
   - npm i --only=dev
 
 script:
-  - npm run test2
+  - npm test
 
 cache:
   directories:
     - node_modules
 
 notifications:
+notifications:
+  email:
+    recipients:
+      - info.dvgamer@gmail.com
+    on_success: change # default: always
+    on_failure: always # default: always
+notifications:
+  slack: 
+    rooms:
+      - touno-project:5WPNcvSFwkfOt02zZbDFs2Q9#github-com
+    on_success: always # default: always
+    on_failure: always # default: always
+    on_start: always    # default: never
+    on_cancel: never   # default: always
+    on_error: always   # default: always
   webhooks:
     urls:
       - https://endpoint.touno.io/travis-ci

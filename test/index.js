@@ -1,23 +1,26 @@
 const { expect, assert } = require('chai')
 
 describe('node_debuger', () => {
-  const main = require('../index')
+  const { debuger } = require('../index')
   let scope1
-  let scope2
-  let connClose
 
   before(async () => {
-    scope1 = main.logger
-    scope2 = main.logger('scope2')
+    scope1 = debuger.scope('scope2')
   })
 
   describe('#logger()', () => {
     it('message', async () => {
-      scope2.start('start.')
-      scope2.log('log.')
-      scope2.info('info.')
-      scope2.error(new Error('error.'))
-      scope2.success('success.')
+      await scope1.start('start message.')
+      await scope1.log('log message.')
+      await scope1.info('info message.')
+      await scope1.error(new Error('error message.'))
+      await scope1.success('success message.')
+    
+    })
+    it('audit logs', async () => {
+      await debuger.Audit('debuger Audit log message.')
+      await debuger.LINE('debuger Line log message.')
+      await debuger.Twit('debuger Twitter log message.')
     })
   })
 
