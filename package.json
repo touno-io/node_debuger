@@ -8,6 +8,9 @@
     "eslint": "eslint --ext .js --ignore-path .eslintignore .",
     "test": "npm run eslint && env-cmd test/.env mocha"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/touno-io/node_debuger.git"
