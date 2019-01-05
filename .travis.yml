@@ -23,6 +23,7 @@ before_deploy:
 - git config --global push.default simple
 - git remote add deploy https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
 - npm version patch
+- git push deploy master
 - git push deploy master --tags
 deploy:
   provider: npm

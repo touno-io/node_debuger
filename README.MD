@@ -1,5 +1,12 @@
 # @touno-io/debuger
 
+**debuger beautiful message logs and insert log to mongodb.**
+
+[![version](https://img.shields.io/npm/v/@touno-io/debuger.svg?style=flat-square)](https://www.npmjs.org/package/@touno-io/debuger)
+[![downloads](https://img.shields.io/npm/dt/@touno-io/debuger.svg?style=flat-square)](https://www.npmjs.org/package/@touno-io/debuger)
+[![status](https://img.shields.io/travis/touno-io/node-debuger/master.svg?style=flat-square)](https://travis-ci.org/touno-io/node-debuger)
+![activity](https://img.shields.io/github/commit-activity/y/touno-io/node-debuger.svg?style=flat-square)
+![DUB](https://img.shields.io/dub/l/vibe-d.svg?style=flat-square)
 
 ### Requirement Environment
 ```ini
@@ -19,7 +26,7 @@ yarn i @touno-io/debuger
 ```
 
 ----------
-### Helper
+### Logger
 ##### `object` debuger
   - **log** `function(...msg)` message log normal
   - **start** `function(...msg)` start log and color green.
@@ -29,17 +36,41 @@ yarn i @touno-io/debuger
 
 **sample**
 ```javascript
-import debuger from '@touno.io/debuger'
+import { debuger } from '@touno.io/debuger'
 
-debuger.log('')
-debuger.success('completed.')
-debuger.error(new Error('Error Test'))
+// insert log to db audit-log
+await debuger.Audit('Hello World!!')
+// insert log to db notify-log.
+await debuger.LINE('Hello World!!')
+await debuger.Twit('Hello World!!')
+
+const logger = debuger.scope('test')
+
+logger.log('message')
+logger.info('message')
+logger.start('begin')
+logger.success('end')
+logger.warning('error type warning.')
+logger.error(new Error('Error'))
+
 ```
 
 ##### `object` Raven
-  - **set** `function(config)` set config Raven object on exception.
+  - **install** `function(config)` set config Raven object on exception.
+  - **Tracking** `function(callback)` function for main process and catch error.
   - **error** `function(ex)` reporting error to sentry.
   - **warning** `function(ex)` reporting warning to sentry.
+
+**sample**
+```javascript
+import { Raven } from '@touno.io/debuger'
+
+Raven.install({
+  pkg: require('path').join(__dirname, 'package.json')
+}).Tracking(async pkg => {
+  // something
+})
+```
 
 ##### `object` Other
   - **DevMode** `boolean` Development.
