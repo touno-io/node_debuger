@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/touno-io/node_debuger.git"
+    "url": "git+https://github.com/touno-io/node-debuger.git"
   },
   "files": [
     "package.json",
@@ -35,9 +35,9 @@
   "author": "Kananek Thongkam",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/touno-io/node_debuger/issues"
+    "url": "https://github.com/touno-io/node-debuger/issues"
   },
-  "homepage": "https://github.com/touno-io/node_debuger#readme",
+  "homepage": "https://github.com/touno-io/node-debuger#readme",
   "dependencies": {
     "@touno-io/db": "^1.1.0",
     "chalk": "^2.4.1",

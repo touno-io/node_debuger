@@ -1,18 +1,29 @@
 language: node_js
 node_js:
-  - stable
-before_script:
-  - npm i
-  - npm i --only=dev
-script:
-  - npm test
-after_script:
-  - git fetch --tags
-  - npm version patch
-  - git push origin master --tags
+- stable
+env:
+  global:
+  - GIT_NAME: Travis CI
+  - GIT_EMAIL: builds@travis-ci.org
+  - TRAVIS_REPO_SLUG: touno-io/node-debuger
+  - GIT_BRANCH: master
+  - secure: rl8K6rCzWp/kpHIhAftH0NNx0Xctoo2GEYYLij2i/kP7FgX1CWkpWJ6AfIZ27isP9Acp5D26v9BWWa+q/P6tOOX1JrjTZO1u/42YkllSdphKvuUKetAloNSrc/Cu9AswIP8Gz1vB/TjW3nhuqM0M9gzGb/KzSZ11AFYKhpw3px8O53UfS0U5T51bw1XZzgdoc/tdTxjLj6awJoXI4eu+MQnQTKa2Os2+wI8MMRUtQ7vCCpQvBnsEoIxIYARRJVew4r9GFAWu//SDY5qKedt/4rlsi+BZ4EPDMgL/ifJJUTSxZxfxYolKQxOAqH6dlcJl25U/BYZI0ERf/PsalyaZ0MTB8GreQbXumLGjBV4XTuRWuAc3z5lnNjEIDJKJYdX5Fy5z9bFrxlzw3ny/2GQE0XnHEjDqPBTC/Jp5dOyeVRGVtvOz+RuY3ktN0uuUtnOz8IkyUwzOpMnKu74d8Ib0qb87PcXudgaLgFAk2bFxP7N5JU++4YOMaeu0GVaXCefYKeG5zIluiFvpoJH5I+9vM1kXwuuoBgmNgMrGZPOkEtISgONHvrcCLCJD+1OA1XjddaxlGdu2U4WMrWdLFCL00GM2A9YSqFyLaTi8GQGX5n8TNZdAcjRqNBsne6XkhI2yHIYvi4pXJK3demQ5aG70OKLjJVL33EKCLasRTQfeuzs=
 cache:
   directories:
   - node_modules
+before_script:
+- npm i
+- npm i --only=dev
+script:
+- npm test
+before_deploy:
+- git fetch --tags
+- git config --global user.email "${GIT_EMAIL}"
+- git config --global user.name "${GIT_NAME}"
+- git config --global push.default simple
+- git remote add origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+- npm version patch
+- git push origin master --tags
 deploy:
   provider: npm
   email: info.dvgamer@gmail.com
@@ -20,7 +31,7 @@ deploy:
     secure: IabDjN4yJEv4qO9G1AoOWpwFlO0mZSCv4P9Gs6pRarboiiQyepTqeWPeNtRmHP2wez1qgxn3imdwpY+bDyE35LDIQ6O+D0ThZGjZn7pwhRfoDLhkxCf2uJSRqWn3M79DJNiLaYd3QhCQlvlPpx0vhl6/W8HisBrG9nRyJIMemkoQvvxrfq7F1p+oi7O3mYYlDNzfDn1Aot2W5IOlkmqVNm+2mbsGLu/Cc6UIjGqYVvsfhZVeXKFmMA4awTNmWWtYVa8Gzweb7yPlEzK7T1avqqcxX/xfShkEpPnkNQkTDJxBc9wJLOppL91z8SZgAmHx103IPjekYcAtpW3MqznkKAG3nXFlPv4YjvWJevbozJrp/VonicVelzFs9BgE5lAODr6PxE/LbjM+KOHMJUzK1lZsjkImOxcDkQ0sgdQMXjEleJ9PCQsHO+9dXD8mOLfieOKXJGl4ToxxmHA10JriBNBs2f7QCZm58/C26lWi9MHi8NPKONChSo1DvUS5ibeqhZROFJqBLLde1/9vNrYfDUxvhljeeaLlXw5dhsKSTdletExop1vgE/ZloBGZ4iZd6GE8aUtMmEyHTxJSKdQgc605x+cJtsAAeArSrKF8guglluT/s6N+c9haN0J5WQBYKVr93+qODz6MPffbp/GEoM83JpXQzorVTi17Zlt4yys=
   on:
     branch: master
-    tags: true
+    tags: false
     repo: touno-io/node-debuger
 notifications:
   slack:
