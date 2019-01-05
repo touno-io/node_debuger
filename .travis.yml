@@ -2,11 +2,6 @@ language: node_js
 node_js:
   - "stable"
 
-env:
-  - TZ=Asia/Bangkok
-  - NODE_ENV=production
-  - MONGODB_DEBUGER=false
-
 before_script:
   - npm i
   - npm i --only=dev
