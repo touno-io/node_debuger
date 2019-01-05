@@ -1,11 +1,15 @@
 language: node_js
 node_js:
-- stable
+  - stable
 before_script:
-- npm i
-- npm i --only=dev
+  - npm i
+  - npm i --only=dev
 script:
-- npm test
+  - npm test
+after_script:
+  - git fetch --tags
+  - npm version patch
+  - git push origin master --tags
 cache:
   directories:
   - node_modules
@@ -15,6 +19,7 @@ deploy:
   api_key:
     secure: IabDjN4yJEv4qO9G1AoOWpwFlO0mZSCv4P9Gs6pRarboiiQyepTqeWPeNtRmHP2wez1qgxn3imdwpY+bDyE35LDIQ6O+D0ThZGjZn7pwhRfoDLhkxCf2uJSRqWn3M79DJNiLaYd3QhCQlvlPpx0vhl6/W8HisBrG9nRyJIMemkoQvvxrfq7F1p+oi7O3mYYlDNzfDn1Aot2W5IOlkmqVNm+2mbsGLu/Cc6UIjGqYVvsfhZVeXKFmMA4awTNmWWtYVa8Gzweb7yPlEzK7T1avqqcxX/xfShkEpPnkNQkTDJxBc9wJLOppL91z8SZgAmHx103IPjekYcAtpW3MqznkKAG3nXFlPv4YjvWJevbozJrp/VonicVelzFs9BgE5lAODr6PxE/LbjM+KOHMJUzK1lZsjkImOxcDkQ0sgdQMXjEleJ9PCQsHO+9dXD8mOLfieOKXJGl4ToxxmHA10JriBNBs2f7QCZm58/C26lWi9MHi8NPKONChSo1DvUS5ibeqhZROFJqBLLde1/9vNrYfDUxvhljeeaLlXw5dhsKSTdletExop1vgE/ZloBGZ4iZd6GE8aUtMmEyHTxJSKdQgc605x+cJtsAAeArSrKF8guglluT/s6N+c9haN0J5WQBYKVr93+qODz6MPffbp/GEoM83JpXQzorVTi17Zlt4yys=
   on:
+    branch: master
     tags: true
     repo: touno-io/node-debuger
 notifications:
