@@ -24,7 +24,7 @@ before_deploy:
 - git config --global push.default simple
 - git remote add deploy https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
 - git checkout .
-- npm version patch
+- npm version patch -m "[skip ci] Releasing tag v%s"
 - git push deploy master
 - git push deploy master --tags
 deploy:
