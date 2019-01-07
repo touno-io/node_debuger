@@ -11,6 +11,7 @@ env:
 cache:
   directories:
   - node_modules
+
 before_script:
 - npm i
 - npm i --only=dev
