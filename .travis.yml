@@ -4,7 +4,7 @@ node_js:
 env:
   global:
   - GIT_NAME: Travis CI
-  - GIT_EMAIL: builds@travis-ci.org
+  - GIT_EMAIL: builds@touno.io
   - TRAVIS_REPO_SLUG: touno-io/node-debuger
   - GIT_BRANCH: master
   - secure: rl8K6rCzWp/kpHIhAftH0NNx0Xctoo2GEYYLij2i/kP7FgX1CWkpWJ6AfIZ27isP9Acp5D26v9BWWa+q/P6tOOX1JrjTZO1u/42YkllSdphKvuUKetAloNSrc/Cu9AswIP8Gz1vB/TjW3nhuqM0M9gzGb/KzSZ11AFYKhpw3px8O53UfS0U5T51bw1XZzgdoc/tdTxjLj6awJoXI4eu+MQnQTKa2Os2+wI8MMRUtQ7vCCpQvBnsEoIxIYARRJVew4r9GFAWu//SDY5qKedt/4rlsi+BZ4EPDMgL/ifJJUTSxZxfxYolKQxOAqH6dlcJl25U/BYZI0ERf/PsalyaZ0MTB8GreQbXumLGjBV4XTuRWuAc3z5lnNjEIDJKJYdX5Fy5z9bFrxlzw3ny/2GQE0XnHEjDqPBTC/Jp5dOyeVRGVtvOz+RuY3ktN0uuUtnOz8IkyUwzOpMnKu74d8Ib0qb87PcXudgaLgFAk2bFxP7N5JU++4YOMaeu0GVaXCefYKeG5zIluiFvpoJH5I+9vM1kXwuuoBgmNgMrGZPOkEtISgONHvrcCLCJD+1OA1XjddaxlGdu2U4WMrWdLFCL00GM2A9YSqFyLaTi8GQGX5n8TNZdAcjRqNBsne6XkhI2yHIYvi4pXJK3demQ5aG70OKLjJVL33EKCLasRTQfeuzs=
