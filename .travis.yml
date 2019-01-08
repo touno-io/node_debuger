@@ -17,18 +17,18 @@ before_script:
 - npm i --only=dev
 script:
 - npm test
-before_deploy:
-- git fetch --tags
-- git config --global user.email "${GIT_EMAIL}"
-- git config --global user.name "${GIT_NAME}"
-- git config --global push.default simple
-- git remote add deploy https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
-- git checkout .
-- npm version patch -m "[skip ci] Releasing tag v%s"
-# - git commit --amend -m "Merge last version to master."
-- git merge $(git tag --no-merge)
-- git push deploy master
-- git push deploy master --tags
+# before_deploy:
+# - git fetch --tags
+# - git config --global user.email "${GIT_EMAIL}"
+# - git config --global user.name "${GIT_NAME}"
+# - git config --global push.default simple
+# - git remote add deploy https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+# - git checkout .
+# - npm version patch -m "[skip ci] Releasing tag v%s"
+# # - git commit --amend -m "Merge last version to master."
+# - git merge $(git tag --no-merge)
+# - git push deploy master
+# - git push deploy master --tags
 deploy:
   provider: npm
   email: info.dvgamer@gmail.com

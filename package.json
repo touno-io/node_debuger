@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node test/index.js",
     "eslint": "eslint --ext .js --ignore-path .eslintignore .",
-    "test": "npm run eslint && env-cmd test/.env mocha"
+    "test": "npm run eslint && env-cmd test/.env mocha",
+    "deploy": "npm version patch -m \"Releasing tag v%s\" && git merge $(git tag --no-merge) && git push origin master"
   },
   "publishConfig": {
     "access": "public"
