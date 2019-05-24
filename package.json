@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node test/index.js",
     "eslint": "eslint --ext .js --ignore-path .eslintignore .",
-    "test": "npm run eslint && env-cmd test/.env mocha",
+    "test": "npm run eslint && env-cmd test/.env node test",
     "deploy": "npm version patch -m \"Releasing tag v%s\" && git merge $(git tag --no-merge) && git push origin master"
   },
   "publishConfig": {
@@ -17,14 +17,10 @@
     "url": "git+https://github.com/touno-io/node-debuger.git"
   },
   "files": [
-    "package.json",
-    "index.js",
     "LICENSE",
     "README.MD",
-    "helper/logger.js",
-    "helper/raven.js",
-    "helper/time.js",
-    "helper/variable.js"
+    "package.json",
+    "index.js"
   ],
   "keywords": [
     "touno.io",
@@ -40,13 +36,9 @@
   },
   "homepage": "https://github.com/touno-io/node-debuger#readme",
   "dependencies": {
-    "@touno-io/db": "^1.4.3",
+    "@touno-io/db": "^2.2.0",
     "chalk": "^2.4.2",
-    "moment": "^2.24.0",
-    "numeral": "^2.0.6",
-    "raven": "^2.6.4",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
@@ -55,13 +47,10 @@
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-html": "^4.0.6",
-    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "mocha": "^5.2.0",
-    "mocha-logger": "^1.0.6",
-    "youch": "^2.0.10",
-    "youch-terminal": "^1.0.0"
+    "mocha": "^5.2.0"
   }
 }

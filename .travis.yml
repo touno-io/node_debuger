@@ -1,56 +1,27 @@
 language: node_js
 node_js:
 - stable
-env:
-  global:
-  - GIT_NAME: Travis CI
-  - GIT_EMAIL: builds@touno.io
-  - TRAVIS_REPO_SLUG: touno-io/node-debuger
-  - GIT_BRANCH: master
-  - secure: rl8K6rCzWp/kpHIhAftH0NNx0Xctoo2GEYYLij2i/kP7FgX1CWkpWJ6AfIZ27isP9Acp5D26v9BWWa+q/P6tOOX1JrjTZO1u/42YkllSdphKvuUKetAloNSrc/Cu9AswIP8Gz1vB/TjW3nhuqM0M9gzGb/KzSZ11AFYKhpw3px8O53UfS0U5T51bw1XZzgdoc/tdTxjLj6awJoXI4eu+MQnQTKa2Os2+wI8MMRUtQ7vCCpQvBnsEoIxIYARRJVew4r9GFAWu//SDY5qKedt/4rlsi+BZ4EPDMgL/ifJJUTSxZxfxYolKQxOAqH6dlcJl25U/BYZI0ERf/PsalyaZ0MTB8GreQbXumLGjBV4XTuRWuAc3z5lnNjEIDJKJYdX5Fy5z9bFrxlzw3ny/2GQE0XnHEjDqPBTC/Jp5dOyeVRGVtvOz+RuY3ktN0uuUtnOz8IkyUwzOpMnKu74d8Ib0qb87PcXudgaLgFAk2bFxP7N5JU++4YOMaeu0GVaXCefYKeG5zIluiFvpoJH5I+9vM1kXwuuoBgmNgMrGZPOkEtISgONHvrcCLCJD+1OA1XjddaxlGdu2U4WMrWdLFCL00GM2A9YSqFyLaTi8GQGX5n8TNZdAcjRqNBsne6XkhI2yHIYvi4pXJK3demQ5aG70OKLjJVL33EKCLasRTQfeuzs=
 cache:
   directories:
   - node_modules
-
 before_script:
 - npm i
 - npm i --only=dev
 script:
-- npm test
-# before_deploy:
-# - git fetch --tags
-# - git config --global user.email "${GIT_EMAIL}"
-# - git config --global user.name "${GIT_NAME}"
-# - git config --global push.default simple
-# - git remote add deploy https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
-# - git checkout .
-# - npm version patch -m "Releasing tag v%s"
-# # - git commit --amend -m "Merge last version to master."
-# - git merge $(git tag --no-merge)
-# - git push deploy master
-# - git push deploy master --tags
+- npm --version
 deploy:
   provider: npm
   email: info.dvgamer@gmail.com
   api_key:
-    secure: IabDjN4yJEv4qO9G1AoOWpwFlO0mZSCv4P9Gs6pRarboiiQyepTqeWPeNtRmHP2wez1qgxn3imdwpY+bDyE35LDIQ6O+D0ThZGjZn7pwhRfoDLhkxCf2uJSRqWn3M79DJNiLaYd3QhCQlvlPpx0vhl6/W8HisBrG9nRyJIMemkoQvvxrfq7F1p+oi7O3mYYlDNzfDn1Aot2W5IOlkmqVNm+2mbsGLu/Cc6UIjGqYVvsfhZVeXKFmMA4awTNmWWtYVa8Gzweb7yPlEzK7T1avqqcxX/xfShkEpPnkNQkTDJxBc9wJLOppL91z8SZgAmHx103IPjekYcAtpW3MqznkKAG3nXFlPv4YjvWJevbozJrp/VonicVelzFs9BgE5lAODr6PxE/LbjM+KOHMJUzK1lZsjkImOxcDkQ0sgdQMXjEleJ9PCQsHO+9dXD8mOLfieOKXJGl4ToxxmHA10JriBNBs2f7QCZm58/C26lWi9MHi8NPKONChSo1DvUS5ibeqhZROFJqBLLde1/9vNrYfDUxvhljeeaLlXw5dhsKSTdletExop1vgE/ZloBGZ4iZd6GE8aUtMmEyHTxJSKdQgc605x+cJtsAAeArSrKF8guglluT/s6N+c9haN0J5WQBYKVr93+qODz6MPffbp/GEoM83JpXQzorVTi17Zlt4yys=
+    secure: J9yql5Tiy+cKWEBcaCu4VJ5us0sTq+y8TRixnKQum6GFZkOHrdQyUS9ODrHFByQrRlndncygtGMRwGRi8TEg4pgIK0o7gmN6vk9q/Z818Ku/ufE8ojaeF1f0JOOUXa6LidPDSffQqb0aJ762lBof7UX67ee83IW/AIyR/zwV9aBHHsLvHWWnF282T0A4SatDP4PXtzpA2XHjtMEP7zyqIU47cuYAGv6YcigviKAjIhme5lqtVopfViZYiRsRh5VXwJHO97ID8yDeD5Zj3VQo3l18VNCGNcSYAmhrCf2ejXuW6UkzuSdgcPxctArOgy7NF1zQ1X0zvZ3BxJ3Q26dUB0sfppgY0tgPCGKHazl0VOuEzEkQYBpa4Hry6o+aLTU2pn/nqPUkv9mqDnTgH9LhOtno2eZKbF3Othn82eWFyrxlGpxqAFJgG7uyaHsulbyLZSibQuM+j6iI1HsXJqrMvBdEbxN8jhn4PuhXvcOgiGYTv6/Vnn4sFFGfsV6QmGv2rFvW8es3IUr8JFvGi1ZOW2KEkV42D6JBU3PEYOJlYpg+nrGrdEZW9uy5VoT3+zKS6WNJUI15C2T9lCSSLYApPnwdcwhiCUQr1MqA0RMYLd9JKUdQmf01fzCz1KMB5IpV+XnD4MiY91Laa4Z+9ekAeoVm9qtfH8LdnhW+CfkIujs=
   on:
     branch: master
-    tags: false
-    repo: touno-io/node-debuger
+    tags: true
 notifications:
   slack:
     rooms:
-    - touno-project:5WPNcvSFwkfOt02zZbDFs2Q9#github-com
+    - touno-io:ZcDavq693hAAVtvH4ugh9Oen
     on_success: always
-    on_failure: always
-    on_start: always
-    on_cancel: never
-    on_error: always
-  webhooks:
-    urls:
-    - https://endpoint.touno.io/travis-ci
-    on_success: change
     on_failure: always
     on_start: always
     on_cancel: never

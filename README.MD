@@ -12,11 +12,10 @@
 ```ini
 RAVEN_CONFIG=https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}
 MONGODB_DEBUGER=true
-MONGODB_ADMIN=
 MONGODB_SERVER=localhost:27017
 ```
 
-When `MONGODB_DEBUGER` or `RAVEN_CONFIG` is no setting in the environment, module will not insert a database.
+When `MONGODB_DEBUGER` is no setting in the environment, module will not insert a database.
 
 ### Installation
 ```bash
@@ -36,15 +35,11 @@ yarn i @touno-io/debuger
 
 **sample**
 ```javascript
-import { debuger } from '@touno.io/debuger'
+import debuger from '@touno.io/debuger'
 
-// insert log to db audit-log
-await debuger.Audit('Hello World!!')
-// insert log to db notify-log.
-await debuger.LINE('Hello World!!')
-await debuger.Twit('Hello World!!')
-
-const logger = debuger.scope('test')
+const logger = await debuger('test')
+// and not set 'MONGODB_DEBUGER' 
+const logger = debuger('test')
 
 logger.log('message')
 logger.info('message')
@@ -53,34 +48,6 @@ logger.success('end')
 logger.warning('error type warning.')
 logger.error(new Error('Error'))
 
-```
-
-##### `object` Raven
-  - **install** `function(config)` set config Raven object on exception.
-  - **Tracking** `function(callback)` function for main process and catch error.
-  - **error** `function(ex)` reporting error to sentry.
-  - **warning** `function(ex)` reporting warning to sentry.
-
-**sample**
-```javascript
-import { Raven } from '@touno.io/debuger'
-
-Raven.install({
-  pkg: require('path').join(__dirname, 'package.json')
-}).Tracking(async pkg => {
-  // something
-})
-```
-
-##### `object` Other
-  - **DevMode** `boolean` Development.
-  - **DebugMode** `boolean` Server Debuging logs.
-  - **IsWindows** `boolean` check windows version
-  - **IsLinux** `boolean` check linux version
-
-**sample**
-```javascript
-import { DevMode, IsWindows } from '@touno.io/debuger'
 ```
 
 ----------

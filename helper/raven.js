@@ -1,6 +1,6 @@
 const Raven = require('raven')
 const { DevMode } = require('./variable')
-const logger = require('./logger')('raven')
+const logger = require('../logger')('raven')
 let pkg = {}
 let report = {
   warning (ex) {
