@@ -4,7 +4,6 @@
   "description": "debuger beautiful message logs and insert log to mongodb.",
   "main": "index.js",
   "scripts": {
-    "dev": "node test/index.js",
     "eslint": "eslint --ext .js --ignore-path .eslintignore .",
     "test": "npm run eslint && env-cmd test/.env node test",
     "deploy": "npm version patch -m \"Releasing tag v%s\" && git merge $(git tag --no-merge) && git push origin master"
@@ -42,7 +41,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
-    "chai": "^4.2.0",
     "env-cmd": "^8.0.2",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0-beta.0",
@@ -50,7 +48,6 @@
     "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "mocha": "^5.2.0"
+    "eslint-plugin-standard": "^3.1.0"
   }
 }
