@@ -8,7 +8,8 @@ before_script:
 - npm i
 - npm i --only=dev
 script:
-- npm --version
+- git checkout .
+- npm test
 deploy:
   provider: npm
   email: info.dvgamer@gmail.com
