@@ -4,7 +4,7 @@ const f = require('date-format')
 const production = !(process.env.NODE_ENV === 'development')
 const groupSize = 6
 
-const formatDate = production ? 'YYYY-MM-DD HH:mm:ss.SSS' : 'HH:mm:ss.SSS'
+const formatDate = production ? 'yyyy-MM-dd hh:mm:ss.SSS' : 'hh:mm:ss.SSS'
 let scopeSize = 6
 const groupPadding = (msg, size, pad) => {
   return msg.length > size ? msg.substr(0, size) : msg[pad](size, ' ')
@@ -49,7 +49,7 @@ module.exports = (scopeName = null) => {
     async error (ex) {
       if (!ex) return
       let [ , excep ] = /at.*?\((.*?)\)/i.exec(ex.stack) || []
-      let win = [ excep ? `${excep}\n   > ${ex.message}` : ex.message ]
+      let win = [ excep ? `${excep} > ${ex.message}` : ex.message ]
       let msg = [ (excep ? `${ex.message} :: ${excep}` : ex.message || ex) ]
 
       return production ? logWindows(scopeName, 'х', 'error', chalk.red.bold, win) : logLinux(scopeName, 'х', 'error', msg)
