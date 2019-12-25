@@ -35,11 +35,11 @@
   },
   "homepage": "https://github.com/touno-io/node-debuger#readme",
   "dependencies": {
-    "chalk": "^2.4.2",
-    "moment": "^2.24.0"
+    "chalk": "^3.0.0",
+    "date-format": "^3.0.0"
   },
   "devDependencies": {
-    "env-cmd": "^8.0.2",
-    "eslint": "^4.19.1"
+    "env-cmd": "^10.0.1",
+    "eslint": "^6.8.0"
   }
 }
