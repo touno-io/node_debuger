@@ -1,10 +1,11 @@
 const chalk = require('chalk')
 const f = require('date-format')
 
-const production = !(process.env.NODE_ENV === 'development')
+const isWin = process.platform === 'win32'
+const isProduction = !(process.env.NODE_ENV === 'development')
 const groupSize = 6
 
-const formatDate = production ? 'yyyy-MM-dd hh:mm:ss.SSS' : 'hh:mm:ss.SSS'
+const formatDate = isProduction ? 'yyyy-MM-dd hh:mm:ss.SSS' : 'hh:mm:ss.SSS'
 let scopeSize = 6
 const groupPadding = (msg, size, pad) => {
   return msg.length > size ? msg.substr(0, size) : msg[pad](size, ' ')
@@ -32,19 +33,19 @@ module.exports = (scopeName = null) => {
 
   return {
     log (...msg) {
-      return production ? logWindows(scopeName, '…', 'debug', chalk.cyan.bold, msg) : logLinux(scopeName, '…', 'debug', msg)
+      return isWin ? logWindows(scopeName, '…', 'debug', chalk.cyan.bold, msg) : logLinux(scopeName, '…', 'debug', msg)
     },
     start (...msg) {
-      return production ? logWindows(scopeName, '○', 'start', chalk.cyan.bold, msg) : logLinux(scopeName, '○', 'start', msg)
+      return isWin ? logWindows(scopeName, '○', 'start', chalk.cyan.bold, msg) : logLinux(scopeName, '○', 'start', msg)
     },
     success (...msg) {
-      return production ? logWindows(scopeName, '●', 'finish', chalk.green.bold, msg) : logLinux(scopeName, '●', 'finish', msg)
+      return isWin ? logWindows(scopeName, '●', 'finish', chalk.green.bold, msg) : logLinux(scopeName, '●', 'finish', msg)
     },
     warning (...msg) {
-      return production ? logWindows(scopeName, '▲', 'warn', chalk.yellow.bold, msg) : logLinux(scopeName, '▲', 'warn', msg)
+      return isWin ? logWindows(scopeName, '▲', 'warn', chalk.yellow.bold, msg) : logLinux(scopeName, '▲', 'warn', msg)
     },
     info (...msg) {
-      return production ? logWindows(scopeName, '╍', 'info', chalk.blue.bold, msg) : logLinux(scopeName, null, 'info', msg)
+      return isWin ? logWindows(scopeName, '╍', 'info', chalk.blue.bold, msg) : logLinux(scopeName, null, 'info', msg)
     },
     async error (ex) {
       if (!ex) return
@@ -52,7 +53,7 @@ module.exports = (scopeName = null) => {
       let win = [ excep ? `${excep} > ${ex.message}` : ex.message ]
       let msg = [ (excep ? `${ex.message} :: ${excep}` : ex.message || ex) ]
 
-      return production ? logWindows(scopeName, 'х', 'error', chalk.red.bold, win) : logLinux(scopeName, 'х', 'error', msg)
+      return isWin ? logWindows(scopeName, 'х', 'error', chalk.red.bold, win) : logLinux(scopeName, 'х', 'error', msg)
     }
   }
 }
