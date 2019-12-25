@@ -1,11 +1,11 @@
 {
   "name": "@touno-io/debuger",
-  "version": "2.1.0",
+  "version": "2.0.2",
   "description": "debuger beautiful message logs and insert log to mongodb.",
   "main": "index.js",
   "scripts": {
     "eslint": "eslint --ext .js --ignore-path .eslintignore .",
-    "test": "npm run eslint && env-cmd node test",
+    "test": "npm run eslint && env-cmd -f test/.env node test",
     "deploy": "npm version patch -m \"Releasing tag v%s\" && git merge $(git tag --no-merge) && git push origin master"
   },
   "publishConfig": {
