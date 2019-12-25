@@ -35,19 +35,11 @@
   },
   "homepage": "https://github.com/touno-io/node-debuger#readme",
   "dependencies": {
-    "@touno-io/db": "^2.2.0",
     "chalk": "^2.4.2",
     "moment": "^2.24.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
     "env-cmd": "^8.0.2",
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-plugin-html": "^4.0.6",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0"
+    "eslint": "^4.19.1"
   }
 }
