@@ -8,15 +8,6 @@
 ![activity](https://img.shields.io/github/commit-activity/y/touno-io/node-debuger.svg?style=flat-square)
 ![DUB](https://img.shields.io/dub/l/vibe-d.svg?style=flat-square)
 
-### Requirement Environment
-```ini
-RAVEN_CONFIG=https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}
-MONGODB_DEBUGER=true
-MONGODB_SERVER=localhost:27017
-```
-
-When `MONGODB_DEBUGER` is no setting in the environment, module will not insert a database.
-
 ### Installation
 ```bash
 npm i @touno-io/debuger
@@ -24,30 +15,46 @@ npm i @touno-io/debuger
 yarn i @touno-io/debuger
 ```
 
+![Alt text](/docs/preview.gif?raw=true "Preview")
+
 ----------
 ### Logger
 ##### `object` debuger
   - **log** `function(...msg)` message log normal
   - **start** `function(...msg)` start log and color green.
   - **success** `function(...msg)` start log and color green.
+  - **warn** `function(...msg)` start log and color green.
+  - **info** `function(...msg)` info log and color blue.
+  - **error** `function(...msg)` error log and color red.
+
+##### `object` progress cli
+  - **wait** `function(msg, max = 100, sizeBar = 25)` message and progress bar.
+  - **increment** `function(value)` add value.
+  - **update** `function(value)` set value.
+  - **stop** `function()` start log and color green.
   - **info** `function(...msg)` info log and color blue.
   - **error** `function(...msg)` error log and color red.
 
 **sample**
 ```javascript
+// es6
 import debuger from '@touno.io/debuger'
-
 const logger = await debuger('test')
-// and not set 'MONGODB_DEBUGER' 
-const logger = debuger('test')
+
+// javascript
+const logger = require('@touno.io/debuger')('test')
 
 logger.log('message')
 logger.info('message')
 logger.start('begin')
 logger.success('end')
-logger.warning('error type warning.')
+logger.warn('error type warning.')
 logger.error(new Error('Error'))
 
+// progress
+logger.wait('begin', 100)
+logger.update(50)
+logger.stop()
 ```
 
 ----------
