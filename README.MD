@@ -15,9 +15,11 @@ npm i @touno-io/debuger
 yarn i @touno-io/debuger
 ```
 
+----------
+### Preview
+
 ![Alt text](/docs/preview.gif?raw=true "Preview")
 
-----------
 ### Logger
 ##### `object` debuger
   - **log** `function(...msg)` message log normal
