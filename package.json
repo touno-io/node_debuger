@@ -1,6 +1,6 @@
 {
   "name": "@touno-io/debuger",
-  "version": "2.3.4",
+  "version": "2.4.0",
   "description": "debuger beautiful message logs and insert log to mongodb.",
   "main": "index.js",
   "scripts": {
