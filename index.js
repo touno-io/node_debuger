@@ -1,8 +1,9 @@
 const chalk = require('chalk')
+const util = require('util')
 const f = require('date-format')
 const cli = require('cli-progress')
 
-const isWin = process.platform === 'win32'
+const isWin = process.platform !== 'win32'
 const isProduction = !(process.env.NODE_ENV === 'development')
 const groupSize = 6
 
@@ -21,14 +22,22 @@ module.exports = (scopeName = null) => {
       msg2.push(groupPadding(scope, scopeSize, 'padEnd'))
       msg2.push(chalk.cyan('»'))
     }
-    process.stdout.write(msg2.concat(msg).join(' ') + '\n')
+    if (typeof msg !== 'object') msg = [ msg ]
+    if (status === 'debug' && msg.length === 1 && typeof msg[0] === 'object') {
+      process.stdout.write(msg2.concat('Inspect Object:').join(' ') + '\n\n')
+      console.dir(msg[0], { depth: null })
+      process.stdout.write('\n')
+    } else {
+      process.stdout.write(msg2.concat(msg.map(e => (typeof e === 'object') ? util.inspect(e, false, 2, true) : e)).join(' ') + '\n')
+    }
   }
 
   const logLinux = (scope, icon, status, msg) => {
     let msg2 = [ f.asString(formatDate, new Date()), (!icon ? '…' : icon) ]
     if (scope) msg2.push(`[${scope.toUpperCase()}]`)
 
-    process.stdout.write(msg2.concat(msg).join(' ') + '\n')
+    if (typeof msg !== 'object') msg = [ msg ]
+    process.stdout.write(msg2.concat(msg.map(e => (typeof e === 'object') ? util.inspect(e, false, 2, true) : e)).join(' ') + '\n')
     return Promise.resolve()
   }
 
@@ -47,15 +56,16 @@ module.exports = (scopeName = null) => {
       return isWin ? logWindows(scopeName, '▲', 'warn', chalk.yellow.bold, msg) : logLinux(scopeName, '▲', 'warn', msg)
     },
     wait (msg = 'downloading', max = 100, barSize = 25) {
-      let msg2 = [ chalk.gray(f.asString(formatDate, new Date())), chalk.magentaBright('▫'), chalk.magentaBright(groupPadding('wait', groupSize, 'padStart')) ]
-
-      if (scopeName) {
-        if (scopeName.length > scopeSize) scopeSize = scopeName.length
-        msg2.push(groupPadding(scopeName, scopeSize, 'padEnd'))
-        msg2.push(chalk.cyan('»'))
-      }
-
+      let msg2 = []
       if (isWin) {
+        msg2 = [ chalk.gray(f.asString(formatDate, new Date())), chalk.magentaBright('▫'), chalk.magentaBright(groupPadding('wait', groupSize, 'padStart')) ]
+  
+        if (scopeName) {
+          if (scopeName.length > scopeSize) scopeSize = scopeName.length
+          msg2.push(groupPadding(scopeName, scopeSize, 'padEnd'))
+          msg2.push(chalk.cyan('»'))
+        }
+
         bSingleBar = new cli.SingleBar({
           format: msg2.join(' ') + ` ${msg} ({value}/{total}) ${chalk.gray('{bar}')} {percentage}%`,
           barsize: barSize,
@@ -64,8 +74,8 @@ module.exports = (scopeName = null) => {
   
         bSingleBar.start(max, 0)
       } else {
-        msg2.push(msg)
-        msg2.push(`(${max}/${max})`)
+        msg2.push(`${msg}...`)
+        msg2.push(`(${max})`)
         logLinux(scopeName, '▫', 'wait', msg2)
       }
       return bSingleBar

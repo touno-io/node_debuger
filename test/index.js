@@ -5,6 +5,7 @@ const test = async () => {
   logger = debuger('test')
   logger.start('start message.')
   logger.log('log message.')
+  logger.log({ data: 'aasdasd', config: { a: 'a', b: 'b' }, array: [ 'aaaa']})
   logger.info('info message.')
   logger.error(new Error('error message.'))
 
